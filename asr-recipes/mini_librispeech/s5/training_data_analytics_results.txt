@@ -1,0 +1,2 @@
+Train Data: 1519 files, 5.31 hours
+Validation Data: 1089 files, 2.04 hours
