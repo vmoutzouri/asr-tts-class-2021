@@ -1,1 +1,0 @@
-Norwegian Training Data: 366296 files, 527.67 hours

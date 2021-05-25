@@ -5,8 +5,8 @@ output_filename = "training_data_analytics_results.txt"
 dict_path = "/opt/kaldi/egs/mini_librispeech/s5/corpus/LibriSpeech"
 train_dev_files = [0,0]
 train_dev_data_hours = [0.0,0.0]
-train_dict = os.path.join(dict_path, "train-clean-5")
-dev_dict = os.path.join(dict_path, "dev-clean-2") 
+train_dict = dict_path + "train-clean-5"
+dev_dict = dict_path + "dev-clean-2"
 sets = [train_dict, dev_dict]
  
 for i,dataset in enumerate(sets):

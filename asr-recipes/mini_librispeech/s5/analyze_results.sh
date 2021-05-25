@@ -5,5 +5,3 @@ cat $hypothesis_tra | utils/int2sym.pl -f 2- exp/tri3b/graph_tgsmall/words.txt |
 
 python hypothesis.trw hypothesis.wsj
 python $ref_trw ref.wsj
-
-/opt/kaldi/tools/sctk/bin/sclite -i wsj -r ref.wsj -h hypothesis.wsj -o dtl

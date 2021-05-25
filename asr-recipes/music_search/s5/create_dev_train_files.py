@@ -1,77 +1,52 @@
+import os
 import json
-import sys
-import os 
-import os.path
 
-train_folder = os.scandir(sys.argv[1])
+train_folder = os.scandir("/other/data/norwegian_resources/audio/metadata/train/")
 
-train_wav = open(sys.argv[2], "w") 
-train_text = open(sys.argv[3], "w")
-train_utt2spk = open(sys.argv[4], "w")
+train_wav = open("/other/users/vasimou/asr-tts-class-2021/asr-recipes/music_search/s5/train/wav.scp", "w")
+train_text = open("/other/users/vasimou/asr-tts-class-2021/asr-recipes/music_search/s5/train/text", "w")
+train_utt2spk = open("/other/users/vasimou/asr-tts-class-2021/asr-recipes/music_search/s5/train/utt2spk", "w")
+train_spk2utt = open("/other/users/vasimou/asr-tts-class-2021/asr-recipes/music_search/s5/train/spk2utt", "w")
 
-dev_wav = open(sys.argv[5], "w") 
-dev_text = open(sys.argv[6], "w")
-dev_utt2spk = open(sys.argv[7], "w")
+dev_wav = open("/other/users/vasimou/asr-tts-class-2021/asr-recipes/music_search/s5/dev/wav.scp", "w")
+dev_text = open("/other/users/vasimou/asr-tts-class-2021/asr-recipes/music_search/s5/dev/text", "w")
+dev_utt2spk = open("/other/users/vasimou/asr-tts-class-2021/asr-recipes/music_search/s5/dev/utt2spk", "w")
+dev_spk2utt = open("/other/users/vasimou/asr-tts-class-2021/asr-recipes/music_search/s5/dev/spk2utt", "w")
 
-wav_list = []
-text_list = []
-utt2spk_list = []
-
-for train_file in train_folder: 
-    if train_file.name.endswith(".json"):    
-        #print(type(train_file))
-        with open(train_file.path, encoding= 'utf-8') as read_file:
+counter = 0
+for train_file in train_folder:
+    if train_file.is_file and train_file.name.endswith(".json"):
+        with open(train_file, "r") as read_file:
             data = json.load(read_file)
+            counter = counter +1
+        if counter < 800:
             pid = data["pid"]
             speaker = pid[:8]
+            train_spk2utt.write("\n" + speaker + " ")
             try:
                 for i in data['val_recordings']:
-                    restofcode = str(i.get('file')[:-4])
+                    restofcode = i.get('file')[:-4]
                     utterance = str(pid + "_" + restofcode)
-                    line_text = str(i.get('text').upper())
-                    wav_list.append(utterance + ".wav")
-                    text_list.append(utterance + " " + line_text)
-                    utt2spk_list.append(utterance + " " + speaker)
+                    line_text = i.get('text').upper()
+                    train_wav.write(utterance + " |\n")
+                    train_text.write(utterance + " " + line_text + "\n")
+                    train_utt2spk.write(utterance + " " + speaker + "\n")
+                    train_spk2utt.write(utterance + " ")
             except:
                 continue
+        else:
+            pid = data["pid"]
+            speaker = pid[:8]
+            dev_spk2utt.write("\n" + speaker + " ")
+            try:
+                for i in data['val_recordings']:
+                    restofcode = i.get('file')[:-4]
+                    utterance = str(pid + "_" + restofcode)
+                    line_text = i.get('text').upper()
+                    dev_wav.write(utterance + " |\n")
+                    dev_text.write(utterance + " " + line_text + "\n")
+                    dev_utt2spk.write(utterance + " " + speaker + "\n")
+                    dev_spk2utt.write(utterance + " ")
 
-wav_list = sorted(wav_list)
-text_list = sorted(text_list)
-utt2spk_list = sorted(utt2spk_list)
-
-print()
-print(len(wav_list))
-print(len(text_list))
-print(len(utt2spk_list))
-print()
-
-counter = 0
-for i in wav_list:
-    counter +=1
-    if counter < 2000:
-        train_wav.write(i + "\n")
-    elif counter <4000:
-        dev_wav.write(i + "\n")
-    else:
-        break
-print("I have a problem after this!")
-
-counter = 0
-for i in text_list:
-    counter +=1
-    if counter < 2000:
-        train_text.write(i + "\n")
-    elif counter <4000:
-        dev_text.write(i + "\n")
-    else:
-        break
-
-counter = 0
-for i in utt2spk_list:
-    counter +=1
-    if counter < 2000:
-        train_utt2spk.write(i + "\n")
-    elif counter <4000:
-        dev_utt2spk.write(i + "\n")
-    else:
-        break
+            except:
+                continue
