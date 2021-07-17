@@ -1,0 +1,2 @@
+%WER 64.62 [ 53962 / 83503, 19595 ins, 2130 del, 32237 sub ] exp/tri3b/decode_tgmed_dev/wer_17_1.0
+%WER 66.56 [ 55579 / 83503, 17988 ins, 3025 del, 34566 sub ] exp/tri3b/decode_tgmed_dev.si/wer_17_1.0
